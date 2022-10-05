@@ -12,10 +12,17 @@ namespace CursoMVC_NET_Core.Controllers
         //CONTROLADOR: Intermediario entre los modelos y las vistas
         public IActionResult Index()
         {
-            User user = new User();
-            user.Nombre = "Juan";
-            user.Email = "Correo@gmail.com";
-            return View(user);
+            List<User> lst = new List<User>();
+            using(var db = new Models.DB.CursoMVCNETCoreContext())
+            {
+                lst = (from d in db.User
+                       select new User
+                       {
+                           Id = d.Id,
+                           Email = d.Email
+                       }).ToList();
+            }
+            return View(lst);
         }
     }
 }
